@@ -1,52 +1,62 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { useState } from "react";
+import styles from "./page.module.css";
+
+const SEGMENTS = 6;
 
 export default function Home() {
-  const [done, setDone] = useState(false);
+  const controls = useAnimation();
+  const [result, setResult] = useState<number | null>(null);
+  const [spinning, setSpinning] = useState(false);
+
+  const handleSpin = async () => {
+    if (spinning) return;
+
+    setSpinning(true);
+    setResult(null);
+
+    const randomSegment = Math.floor(Math.random() * SEGMENTS);
+    const segmentAngle = 360 / SEGMENTS;
+    const randomOffset = Math.random() * segmentAngle;
+
+    const finalAngle =
+      360 * 5 + (360 - randomSegment * segmentAngle) - randomOffset;
+
+    await controls.start({
+      rotate: finalAngle,
+      transition: {
+        duration: 5,
+        ease: "easeOut"
+      }
+    });
+
+    setResult(randomSegment + 1);
+    setSpinning(false);
+  };
 
   return (
-    <main style={styles.main}>
-      {!done && (
-        <motion.div
-          style={styles.wheel}
-          animate={{ rotate: 360 * 5 }}
-          transition={{
-            duration: 5,
-            ease: "easeInOut"
-          }}
-          onAnimationComplete={() => setDone(true)}
-        />
-      )}
+    <main className={styles.page}>
+      <div className={styles.wheelContainer}>
+        <div className={styles.pointer} />
+        <motion.div className={styles.wheel} animate={controls} />
+      </div>
 
-      {done && (
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
+      <button className={styles.button} onClick={handleSpin}>
+        Spin the wheel
+      </button>
+
+      {result && (
+        <motion.h2
+          className={styles.result}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          You have arrived!
-        </motion.h1>
+          Landed on segment {result}
+        </motion.h2>
       )}
     </main>
   );
 }
-
-const styles: Record<string, React.CSSProperties> = {
-  main: {
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    gap: "24px"
-  },
-  wheel: {
-    width: 200,
-    height: 200,
-    borderRadius: "50%",
-    border: "12px solid #3182ce",
-    borderTopColor: "#e2e8f0"
-  }
-};
