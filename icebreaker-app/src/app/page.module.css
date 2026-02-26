@@ -5,6 +5,9 @@
   justify-content: center;
   flex-direction: column;
   gap: 1.5rem;
+  background-color: var(--background);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .wheelContainer {
@@ -44,8 +47,16 @@
   width: 6rem;
   margin-left: -3rem;
   pointer-events: none;
-  color: white;
-  text-shadow: 0 0 4px rgba(0,0,0,0.6);
+  color: var(--text-color);
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  transition: color 0.3s ease;
+}
+
+.result {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+  transition: color 0.3s ease;
 }
 
 .pointer {
@@ -57,8 +68,7 @@
   height: 0;
   border-left: 0.9375rem solid transparent;
   border-right: 0.9375rem solid transparent;
-  border-top: 1.875rem solid black;
-  border-bottom: none;
+  border-top: 1.875rem solid #111;
   z-index: 2;
 }
 
@@ -68,16 +78,12 @@
   cursor: pointer;
   border-radius: 0.5rem;
   border: none;
-  background-color: #111;
-  color: white;
-  transition: transform 0.15s ease;
+  background-color: var(--text-color);
+  color: var(--background);
+  font-family: var(--font-montserrat), sans-serif;
+  transition: all 0.3s ease;
 }
 
 .button:hover {
   transform: scale(1.05);
-}
-
-.result {
-  font-size: 1.25rem;
-  font-weight: 600;
 }

@@ -2,7 +2,10 @@
 
 import { motion, useAnimation } from "framer-motion";
 import { useState } from "react";
+import Confetti from "react-confetti";
 import styles from "./page.module.css";
+import { Button } from "antd";
+import { useWindowSize } from "react-use";
 
 const CATEGORIES = [
   "Deserted Island",
@@ -19,64 +22,13 @@ const CATEGORIES = [
 
 const SEGMENTS = CATEGORIES.length;
 
-const QUESTIONS: Record<string, string[]> = {
-  "Deserted Island": [
-    "What 3 items would you bring?",
-    "Would you try to escape or settle in?",
-    "What skill would matter most?"
-  ],
-  "My Favorite Things": [
-    "What’s your comfort movie?",
-    "What song never gets old for you?",
-    "Favorite snack of all time?"
-  ],
-  "Travel & Places": [
-    "Dream country to visit?",
-    "City or nature?",
-    "Best trip you've taken?"
-  ],
-  "Would You Rather": [
-    "Live without music or TV?",
-    "Teleport or fly?",
-    "Always be 10 minutes late or 20 minutes early?"
-  ],
-  "Childhood & Nostalgia": [
-    "Favorite childhood toy?",
-    "First best friend?",
-    "Cartoon you loved?"
-  ],
-  "Productivity": [
-    "Morning or night worker?",
-    "Biggest distraction?",
-    "Favorite productivity hack?"
-  ],
-  "Creative Mode": [
-    "If you wrote a book, what genre?",
-    "Invent a holiday.",
-    "Design your dream home."
-  ],
-  "Superpowers": [
-    "Invisible or mind reader?",
-    "One power with limits?",
-    "Hero or villain?"
-  ],
-  "Food & Drink": [
-    "Sweet or savory?",
-    "One cuisine forever?",
-    "Coffee order?"
-  ],
-  "Rapid Fire": [
-    "Cats or dogs?",
-    "Beach or mountains?",
-    "Early bird or night owl?"
-  ]
-};
-
 export default function Home() {
   const controls = useAnimation();
   const [result, setResult] = useState<string | null>(null);
   const [spinning, setSpinning] = useState(false);
   const [question, setQuestion] = useState<string | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const { width, height } = useWindowSize();
 
   const handleSpin = async () => {
     if (spinning) return;
@@ -87,6 +39,7 @@ export default function Home() {
     setSpinning(true);
     setResult(null);
     setQuestion(null); // reset previous question
+    setShowConfetti(false);
 
     const randomIndex = Math.floor(Math.random() * SEGMENTS);
     const segmentAngle = 360 / SEGMENTS;
@@ -112,8 +65,12 @@ export default function Home() {
     console.log(`Wheel landed on category: ${selectedCategory}`);
     console.log("\n******************\n\n");
 
-    setResult(CATEGORIES[randomIndex]);
+    setResult(selectedCategory);
     setSpinning(false);
+
+    // trigger confetti for 3 seconds
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 6000);
   };
 
   const handleQuestion = async () => {
@@ -149,6 +106,16 @@ export default function Home() {
 
   return (
     <main className={styles.page}>
+      {/* Confetti overlay */}
+      {showConfetti && (
+        <Confetti
+          width={width}
+          height={height}
+          numberOfPieces={150}
+          recycle={false} // stop after finishing
+        />
+      )}
+
       <div className={styles.wheelContainer}>
         <div className={styles.pointer} />
 
@@ -177,9 +144,9 @@ export default function Home() {
         </motion.div>
       </div>
 
-      <button className={styles.button} onClick={handleSpin}>
+      <Button type="primary" onClick={handleSpin} style={{ fontFamily: "var(--font-montserrat), sans-serif" }} loading={spinning}>
         Spin the wheel
-      </button>
+      </Button>
 
       {result && (
         <motion.h2
@@ -193,9 +160,9 @@ export default function Home() {
 
       {/* 👇 Question Button Appears After Category */}
       {result && !question && (
-        <button className={styles.button} onClick={handleQuestion}>
-          Get Question
-        </button>
+        <Button type="primary" style={{ fontFamily: "var(--font-montserrat), sans-serif" }} onClick={handleQuestion}>
+          Get Question  
+        </Button>        
       )}
 
       {/* 👇 Animated Question Reveal */}
