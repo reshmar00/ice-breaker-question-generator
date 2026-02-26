@@ -81,6 +81,9 @@ export default function Home() {
   const handleSpin = async () => {
     if (spinning) return;
 
+    console.log("\n\n******************\n");
+    console.log("Spinning the wheel...");
+    console.log("\n******************\n\n");
     setSpinning(true);
     setResult(null);
     setQuestion(null); // reset previous question
@@ -92,6 +95,10 @@ export default function Home() {
     const finalAngle =
       360 * 5 + (360 - randomIndex * segmentAngle) - randomOffset;
 
+    console.log("\n\n******************\n");
+    console.log(`Final angle: ${finalAngle}, selected category index: ${randomIndex}`);
+    console.log("\n******************\n\n");
+
     await controls.start({
       rotate: finalAngle,
       transition: {
@@ -100,20 +107,44 @@ export default function Home() {
       }
     });
 
+    const selectedCategory = CATEGORIES[randomIndex];
+    console.log("\n\n******************\n");
+    console.log(`Wheel landed on category: ${selectedCategory}`);
+    console.log("\n******************\n\n");
+
     setResult(CATEGORIES[randomIndex]);
     setSpinning(false);
   };
 
-  const handleQuestion = () => {
+  const handleQuestion = async () => {
     if (!result) return;
 
-    const questionsForCategory = QUESTIONS[result];
-    const random =
-      questionsForCategory[
-        Math.floor(Math.random() * questionsForCategory.length)
-      ];
+    console.log("\n\n******************\n");
+    console.log(`Fetching question for category: ${result}`);
+    console.log("\n******************\n\n");
+    setQuestion(null);
 
-    setQuestion(random);
+    try {
+      const response = await fetch("/api/question", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ category: result }),
+      });
+
+      const data = await response.json();
+      console.log("\n\n******************\n");
+      console.log("API response:", data);
+      console.log("\n******************\n\n");
+
+      setQuestion(data.question);
+    } catch (error) {
+      console.log("\n\n******************\n");
+      console.error("Error fetching question:", error);
+      console.log("\n******************\n\n");
+      setQuestion("Something went wrong. Try again.");
+    }
   };
 
   return (
