@@ -63,22 +63,22 @@ export async function POST(req: Request) {
     const { category } = await req.json();
 
     if (!category || !QUESTIONS[category]) {
-       console.log("\n******************\n\n");
-      console.log("No category, so no question");
-      console.log("\n\n******************\n");
+      // console.log("\n******************\n\n");
+      // console.log("No category, so no question");
+      // console.log("\n\n******************\n");
       return NextResponse.json({ question: "Unknown category" });
     }
     else{
-      console.log("\n******************\n\n");
-      console.log("Received category in API route:", category);
-      console.log("\n\n******************\n");
+      // console.log("\n******************\n\n");
+      // console.log("Received category in API route:", category);
+      // console.log("\n\n******************\n");
     }
     
     // Return a cached question immediately
     const cachedQuestion = randomFromArray(QUESTIONS[category]);
-    console.log("\n******************\n\n");
-    console.log("Cached question:", cachedQuestion);
-    console.log("\n\n******************\n");
+    // console.log("\n******************\n\n");
+    // console.log("Cached question:", cachedQuestion);
+    // console.log("\n\n******************\n");
 
     //Fire off async GPT cloud update
     (async () => {
@@ -98,9 +98,9 @@ export async function POST(req: Request) {
         });
 
         const data = await ollamaResponse.json();
-        console.log("\n******************\n\n");
-        console.log("Ollama response:", data);
-        console.log("\n\n******************\n");
+        // console.log("\n******************\n\n");
+        // console.log("Ollama response:", data);
+        // console.log("\n\n******************\n");
 
         const newQuestion = data?.response?.trim();
 
@@ -113,7 +113,7 @@ export async function POST(req: Request) {
             QUESTIONS[category].shift();
             QUESTIONS[category].push(newQuestion);
           }
-          console.log(`Updated cache for "${category}". Total questions: ${QUESTIONS[category].length}`);
+          // console.log(`Updated cache for "${category}". Total questions: ${QUESTIONS[category].length}`);
         }
         } catch (err) {
           console.error("Error refreshing GPT question:", err);
@@ -123,9 +123,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ question: cachedQuestion });
 
       } catch (error) {
-        console.log("\n******************\n\n");
-        console.error("Error in API route:", error);
-        console.log("\n\n******************\n");
+        // console.log("\n******************\n\n");
+        // console.error("Error in API route:", error);
+        // console.log("\n\n******************\n");
         return NextResponse.json({ error: "Failed to generate question" },{ status: 500 });
   }
 }

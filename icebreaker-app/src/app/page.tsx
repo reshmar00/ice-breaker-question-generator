@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useAnimation } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Confetti from "react-confetti";
 import styles from "./page.module.css";
 import { Button } from "antd";
@@ -33,9 +33,9 @@ export default function Home() {
   const handleSpin = async () => {
     if (spinning) return;
 
-    console.log("\n\n******************\n");
-    console.log("Spinning the wheel...");
-    console.log("\n******************\n\n");
+    // console.log("\n\n******************\n");
+    // console.log("Spinning the wheel...");
+    // console.log("\n******************\n\n");
     setSpinning(true);
     setResult(null);
     setQuestion(null); // reset previous question
@@ -48,9 +48,9 @@ export default function Home() {
     const finalAngle =
       360 * 5 + (360 - randomIndex * segmentAngle) - randomOffset;
 
-    console.log("\n\n******************\n");
-    console.log(`Final angle: ${finalAngle}, selected category index: ${randomIndex}`);
-    console.log("\n******************\n\n");
+    // console.log("\n\n******************\n");
+    // console.log(`Final angle: ${finalAngle}, selected category index: ${randomIndex}`);
+    // console.log("\n******************\n\n");
 
     await controls.start({
       rotate: finalAngle,
@@ -61,24 +61,29 @@ export default function Home() {
     });
 
     const selectedCategory = CATEGORIES[randomIndex];
-    console.log("\n\n******************\n");
-    console.log(`Wheel landed on category: ${selectedCategory}`);
-    console.log("\n******************\n\n");
+    // console.log("\n\n******************\n");
+    // console.log(`Wheel landed on category: ${selectedCategory}`);
+    // console.log("\n******************\n\n");
 
     setResult(selectedCategory);
     setSpinning(false);
 
-    // trigger confetti for 3 seconds
+    // trigger confetti for 6 seconds
     setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 6000);
   };
+
+  useEffect(() => {
+    if (!showConfetti) return;
+    const timer = setTimeout(() => setShowConfetti(false), 6000);
+    return () => clearTimeout(timer);
+  }, [showConfetti]);
 
   const handleQuestion = async () => {
     if (!result) return;
 
-    console.log("\n\n******************\n");
-    console.log(`Fetching question for category: ${result}`);
-    console.log("\n******************\n\n");
+    // console.log("\n\n******************\n");
+    // console.log(`Fetching question for category: ${result}`);
+    // console.log("\n******************\n\n");
     setQuestion(null);
 
     try {
@@ -91,15 +96,15 @@ export default function Home() {
       });
 
       const data = await response.json();
-      console.log("\n\n******************\n");
-      console.log("API response:", data);
-      console.log("\n******************\n\n");
+      // console.log("\n\n******************\n");
+      // console.log("API response:", data);
+      // console.log("\n******************\n\n");
 
       setQuestion(data.question);
     } catch (error) {
-      console.log("\n\n******************\n");
-      console.error("Error fetching question:", error);
-      console.log("\n******************\n\n");
+      // console.log("\n\n******************\n");
+      // console.error("Error fetching question:", error);
+      // console.log("\n******************\n\n");
       setQuestion("Something went wrong. Try again.");
     }
   };
@@ -168,8 +173,8 @@ export default function Home() {
       {/* 👇 Animated Question Reveal */}
       {question && (
         <motion.div
-          initial={{ y: 60, opacity: 0, color: "#ffffff" }}
-          animate={{ y: 0, opacity: 1, color: "#000000" }}
+          initial={{ y: 60, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           style={{
             fontSize: "1.25rem",
