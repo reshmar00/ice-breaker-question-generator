@@ -36,10 +36,6 @@ export default function Home() {
 
   const handleSpin = async () => {
     if (spinning || spinDisabled) return;
-
-    // console.log("\n\n******************\n");
-    // console.log("Spinning the wheel...");
-    // console.log("\n******************\n\n");
     setSpinning(true);
 
     setResult(null);
@@ -49,17 +45,9 @@ export default function Home() {
     const randomIndex = Math.floor(Math.random() * SEGMENTS);
     const segmentAngle = 360 / SEGMENTS;
     const randomOffset = Math.random() * segmentAngle;
-<<<<<<< HEAD
 
     const finalAngle =
       360 * 5 + (360 - randomIndex * segmentAngle) - randomOffset;
-
-    // console.log("\n\n******************\n");
-    // console.log(`Final angle: ${finalAngle}, selected category index: ${randomIndex}`);
-    // console.log("\n******************\n\n");
-=======
-    const finalAngle = 360 * 5 + (360 - randomIndex * segmentAngle) - randomOffset;
->>>>>>> 042b3f9 (Added alternate AI option for generating questions; confirmed works locally)
 
     await controls.start({
       rotate: finalAngle,
@@ -67,37 +55,24 @@ export default function Home() {
     });
 
     const selectedCategory = CATEGORIES[randomIndex];
-    // console.log("\n\n******************\n");
-    // console.log(`Wheel landed on category: ${selectedCategory}`);
-    // console.log("\n******************\n\n");
 
     setResult(selectedCategory);
 
-<<<<<<< HEAD
-    // trigger confetti for 6 seconds
-=======
     // Stop spinning immediately
     setSpinning(false);
     setSpinDisabled(true); // disable permanently
 
->>>>>>> 042b3f9 (Added alternate AI option for generating questions; confirmed works locally)
     setShowConfetti(true);
   };
 
-<<<<<<< HEAD
+
   useEffect(() => {
     if (!showConfetti) return;
     const timer = setTimeout(() => setShowConfetti(false), 6000);
     return () => clearTimeout(timer);
   }, [showConfetti]);
 
-  const handleQuestion = async () => {
-    if (!result) return;
 
-    // console.log("\n\n******************\n");
-    // console.log(`Fetching question for category: ${result}`);
-    // console.log("\n******************\n\n");
-=======
   const handleQuestion = () => {
     if (!result){
       console.log("\n\n******************\n");
@@ -143,7 +118,6 @@ export default function Home() {
       return;
     } 
     setLoadingAI(true);
->>>>>>> 042b3f9 (Added alternate AI option for generating questions; confirmed works locally)
     setQuestion(null);
 
     try {
@@ -160,34 +134,23 @@ export default function Home() {
       } 
 
       const data = await response.json();
-<<<<<<< HEAD
-      // console.log("\n\n******************\n");
-      // console.log("API response:", data);
-      // console.log("\n******************\n\n");
-
-      setQuestion(data.question);
-    } catch (error) {
-      // console.log("\n\n******************\n");
-      // console.error("Error fetching question:", error);
-      // console.log("\n******************\n\n");
-      setQuestion("Something went wrong. Try again.");
-=======
       console.log("\n\n******************\n");
       console.log(`Data response in JOSN: ${data}`);
       console.log("\n******************\n\n");
 
       setQuestion(data.question ?? "AI failed to generate a question.");
-    } catch (err) {
+
+    } catch (error) {
       console.log("\n\n******************\n");
-      console.error("Error fetching AI question:", err);
+      console.error("Error fetching AI question:", error);
       console.log("\n******************\n\n");
+
       setQuestion("Something went wrong with AI question generation.");
     } finally {
       console.log("\n\n******************\n");
       console.log(`Reached 'finally' block`);
       console.log("\n******************\n\n");
       setLoadingAI(false);
->>>>>>> 042b3f9 (Added alternate AI option for generating questions; confirmed works locally)
     }
   };
 
