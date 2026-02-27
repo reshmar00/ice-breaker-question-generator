@@ -1,67 +1,10 @@
 import { NextResponse } from "next/server";
 
-const MAX_CACHE_SIZE = 30;
-
-const QUESTIONS: Record<string, string[]> = {
-  "Deserted Island": [
-    "What 3 items would you bring?",
-    "Would you try to escape or settle in?",
-    "What skill would matter most?"
-  ],
-  "My Favorite Things": [
-    "What’s your comfort movie?",
-    "What song never gets old for you?",
-    "Favorite snack of all time?"
-  ],
-  "Travel & Places": [
-    "Dream country to visit?",
-    "City or nature?",
-    "Best trip you've taken?"
-  ],
-  "Would You Rather": [
-    "Live without music or TV?",
-    "Teleport or fly?",
-    "Always be 10 minutes late or 20 minutes early?"
-  ],
-  "Childhood & Nostalgia": [
-    "Favorite childhood toy?",
-    "First best friend?",
-    "Cartoon you loved?"
-  ],
-  "Productivity": [
-    "Morning or night worker?",
-    "Biggest distraction?",
-    "Favorite productivity hack?"
-  ],
-  "Creative Mode": [
-    "If you wrote a book, what genre?",
-    "Invent a holiday.",
-    "Design your dream home."
-  ],
-  "Superpowers": [
-    "Invisible or mind reader?",
-    "One power with limits?",
-    "Hero or villain?"
-  ],
-  "Food & Drink": [
-    "Sweet or savory?",
-    "One cuisine forever?",
-    "Coffee order?"
-  ],
-  "Rapid Fire": [
-    "Cats or dogs?",
-    "Beach or mountains?",
-    "Early bird or night owl?"
-  ]
-};
-
-// Helper to pick random item from array
-const randomFromArray = <T>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
-
 export async function POST(req: Request) {
   try {
     const { category } = await req.json();
 
+<<<<<<< HEAD
     if (!category || !QUESTIONS[category]) {
       // console.log("\n******************\n\n");
       // console.log("No category, so no question");
@@ -79,31 +22,56 @@ export async function POST(req: Request) {
     // console.log("\n******************\n\n");
     // console.log("Cached question:", cachedQuestion);
     // console.log("\n\n******************\n");
+=======
+    if (!category) {
+      console.log("No category provided");
+      return NextResponse.json({ question: "Unknown category" });
+    }
 
-    //Fire off async GPT cloud update
-    (async () => {
-      try {
-        const prompt = `Generate one safe-for-work icebreaker question for the category: "${category}". Rules: Keep it short. No sexual content. No politics. No religion. Make it fun and conversational. Return ONLY the question text.`;
-        
-        const ollamaResponse = await fetch("http://localhost:11434/api/generate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "gpt-oss:20b-cloud",
-            prompt,
-            stream: false,
-          }),
-        });
+    console.log("Received category in API route:", category);
 
+    const prompt = `Generate one safe-for-work icebreaker question for the category "${category}". 
+    Rules: Make it fun, conversational, and whimsical. Avoid sexual content, politics, or religion. 
+    Be creative and unexpected — we've cleared out all the basic questions, so try something fresh and unique. 
+    Return ONLY the question text.`;
+
+    const apiKey = process.env.OLLAMA_API_KEY;
+
+    if (!apiKey) {
+      console.error("OLLAMA_API_KEY not set");
+      return NextResponse.json({ question: "API key not configured" }, { status: 500 });
+    }
+>>>>>>> 042b3f9 (Added alternate AI option for generating questions; confirmed works locally)
+
+    const response = await fetch("https://ollama.com/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "gpt-oss:20b-cloud",
+        prompt,
+        stream: false,
+      }),
+    });
+
+<<<<<<< HEAD
         const data = await ollamaResponse.json();
         // console.log("\n******************\n\n");
         // console.log("Ollama response:", data);
         // console.log("\n\n******************\n");
+=======
+    if (!response.ok) {
+      console.error("Ollama API error:", response.statusText);
+      return NextResponse.json({ question: "Failed to generate question" }, { status: 500 });
+    }
+>>>>>>> 042b3f9 (Added alternate AI option for generating questions; confirmed works locally)
 
-        const newQuestion = data?.response?.trim();
+    const data = await response.json();
+    const question = data?.response?.trim() ?? "No question returned";
 
+<<<<<<< HEAD
         if (newQuestion) {
             //Push to cache, implement rolling queue
           if (QUESTIONS[category].length < MAX_CACHE_SIZE) {
@@ -127,5 +95,14 @@ export async function POST(req: Request) {
         // console.error("Error in API route:", error);
         // console.log("\n\n******************\n");
         return NextResponse.json({ error: "Failed to generate question" },{ status: 500 });
+=======
+    console.log("Generated question:", question);
+
+    return NextResponse.json({ question });
+
+  } catch (error) {
+    console.error("Error in API route:", error);
+    return NextResponse.json({ question: "Failed to generate question" }, { status: 500 });
+>>>>>>> 042b3f9 (Added alternate AI option for generating questions; confirmed works locally)
   }
 }

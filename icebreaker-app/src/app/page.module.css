@@ -87,3 +87,23 @@
 .button:hover {
   transform: scale(1.05);
 }
+
+.AIButton {
+  border: 0.15rem solid transparent; /* transparent border */
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-montserrat), sans-serif;
+  font-weight: 500;
+  color: #000;
+  cursor: pointer;
+  background: linear-gradient(#fff, #fff) padding-box, /* inner fill */
+              linear-gradient(to right, #00f0ff, #a855f7) border-box; /* gradient border */
+  transition: all 0.3s ease;
+}
+
+.AIButton:hover {
+  background: linear-gradient(to right, #00f0ff, #a855f7) padding-box, /* gradient fill */
+              linear-gradient(#fff, #fff) border-box; /* border */
+  color: #000;
+  transform: scale(1.05);
+}
