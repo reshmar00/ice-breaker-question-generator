@@ -75,46 +75,22 @@ export default function Home() {
 
   const handleQuestion = () => {
     if (!result){
-      console.log("\n\n******************\n");
-      console.log(`No result in handleQuestion`);
-      console.log("\n******************\n\n");
       return;
     } 
-
-    console.log("\n\n******************\n");
-    console.log(`Fetching question for category: ${result}`);
-    console.log("\n******************\n\n");
-
     const categoryQuestions = QUESTIONS[result];
-    console.log("\n\n******************\n");
-    console.log(`Get questions from: ${categoryQuestions}`);
-    console.log("\n******************\n\n");
-
     if (!categoryQuestions || categoryQuestions.length === 0) {
-      console.log("\n\n******************\n");
-      console.log(`categoryQuestions unavailable or categoryQuestions.length === 0`);
-      console.log("\n******************\n\n");
       setQuestion("No questions available for this category.");
       return;
     }
 
     const randomIndex = Math.floor(Math.random() * categoryQuestions.length);
-    console.log("\n\n******************\n");
-    console.log(`Picking random index: ${randomIndex}`);
-    console.log("\n******************\n\n");
 
     const questionSet = categoryQuestions[randomIndex];
     setQuestion(questionSet);
-    console.log("\n\n******************\n");
-    console.log(`Question set: ${questionSet}`);
-     console.log("\n******************\n\n");
   };
 
   const handleAIQuestion = async () => {
     if (!result){
-      console.log("\n\n******************\n");
-      console.log(`No result in handleAIQuestion`);
-      console.log("\n******************\n\n");
       return;
     } 
     setLoadingAI(true);
@@ -127,29 +103,11 @@ export default function Home() {
         body: JSON.stringify({ category: result })
       });
 
-      if (!response.ok){
-        console.log("\n\n******************\n");
-        console.log(`Response not okay from API`);
-        console.log("\n******************\n\n");
-      } 
-
       const data = await response.json();
-      console.log("\n\n******************\n");
-      console.log(`Data response in JOSN: ${data}`);
-      console.log("\n******************\n\n");
-
       setQuestion(data.question ?? "AI failed to generate a question.");
-
     } catch (error) {
-      console.log("\n\n******************\n");
-      console.error("Error fetching AI question:", error);
-      console.log("\n******************\n\n");
-
       setQuestion("Something went wrong with AI question generation.");
     } finally {
-      console.log("\n\n******************\n");
-      console.log(`Reached 'finally' block`);
-      console.log("\n******************\n\n");
       setLoadingAI(false);
     }
   };
