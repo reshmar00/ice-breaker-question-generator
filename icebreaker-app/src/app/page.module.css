@@ -23,17 +23,20 @@
   border: 0.375rem solid #222;
   position: relative;
   background: conic-gradient(
-    #ff6b6b 0deg 32.727deg,
-    #ffd93d 32.727deg 65.455deg,
-    #6bcb77 65.455deg 98.182deg,
-    #4d96ff 98.182deg 130.909deg,
-    #9d4edd 130.909deg 163.636deg,
-    #f72585 163.636deg 196.364deg,
-    #f77f00 196.364deg 229.091deg,
-    #00b4d8 229.091deg 261.818deg,
-    #90be6d 261.818deg 294.545deg,
-    #ff99c8 294.545deg 327.273deg,
-    #06d6a0 327.273deg 360deg
+    #ff6b6b 0deg 25.714deg,
+    #ffd93d 25.714deg 51.429deg,
+    #6bcb77 51.429deg 77.143deg,
+    #4d96ff 77.143deg 102.857deg,
+    #9d4edd 102.857deg 128.571deg,
+    #f72585 128.571deg 154.286deg,
+    #f77f00 154.286deg 180deg,
+    #00b4d8 180deg 205.714deg,
+    #90be6d 205.714deg 231.429deg,
+    #ff99c8 231.429deg 257.143deg,
+    #06d6a0 257.143deg 282.857deg,
+    #8338ec 282.857deg 308.571deg,
+    #fb5607 308.571deg 334.286deg,
+    #3a86ff 334.286deg 360deg
   );
 }
 
@@ -47,6 +50,7 @@
   text-align: center;
   width: 6rem;
   margin-left: -3rem;
+  white-space: nowrap;
   pointer-events: none;
   color: var(--text-color);
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);

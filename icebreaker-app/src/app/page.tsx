@@ -20,7 +20,10 @@ const CATEGORIES = [
   "Superpowers",
   "Food & Drink",
   "Rapid Fire",
-  "Software & Programming"
+  "Software & Programming",
+  "Music & Soundtracks",
+  "Hot Takes (Friendly Edition)",
+  "Entertainment & Pop Culture"
 ];
 
 const SEGMENTS = CATEGORIES.length;
