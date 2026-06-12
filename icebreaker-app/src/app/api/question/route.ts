@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-oss:20b-cloud",
+        model: "gemma3:27b",
         prompt,
         stream: false,
       }),
