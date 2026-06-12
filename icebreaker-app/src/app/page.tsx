@@ -97,16 +97,22 @@ export default function Home() {
     setQuestion(null);
 
     try {
-      const response = await fetch("/api/question/", {
+      const response = await fetch("/api/question", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category: result })
+        body: JSON.stringify({ category: result }),
+        // Safety net: never let the button spin forever if the request stalls.
+        signal: AbortSignal.timeout(25000),
       });
 
       const data = await response.json();
-      setQuestion(data.question ?? "AI failed to generate a question.");
+      setQuestion(data.question || "AI failed to generate a question.");
     } catch (error) {
-      setQuestion("Something went wrong with AI question generation.");
+      const message =
+        error instanceof Error && error.name === "TimeoutError"
+          ? "AI took too long to respond. Please try again."
+          : "Something went wrong with AI question generation.";
+      setQuestion(message);
     } finally {
       setLoadingAI(false);
     }

@@ -20,6 +20,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ question: "API key not configured" }, { status: 500 });
     }
 
+    // Cap how long we'll wait on Ollama so a stalled upstream can't hang the request forever.
     const response = await fetch("https://ollama.com/api/generate", {
       method: "POST",
       headers: {
@@ -27,10 +28,11 @@ export async function POST(req: Request) {
         "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-oss:20b-cloud",
+        model: "gemma3:27b",
         prompt,
         stream: false,
       }),
+      signal: AbortSignal.timeout(20000),
     });
 
     if (!response.ok) {
@@ -39,11 +41,16 @@ export async function POST(req: Request) {
     }
 
     const data = await response.json();
-    const question = data?.response?.trim() ?? "No question returned";
+    // Use `||` (not `??`) so a blank/whitespace-only reply also falls back instead of rendering nothing.
+    const question = data?.response?.trim() || "No question returned";
 
     return NextResponse.json({ question });
 
   } catch (error) {
+    if (error instanceof Error && error.name === "TimeoutError") {
+      console.error("Ollama request timed out");
+      return NextResponse.json({ question: "AI took too long to respond. Please try again." }, { status: 504 });
+    }
     console.error("Error in API route:", error);
     return NextResponse.json({ question: "Failed to generate question" }, { status: 500 });
   }
