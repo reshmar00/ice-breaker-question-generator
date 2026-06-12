@@ -19,7 +19,8 @@ const CATEGORIES = [
   "Creative Mode",
   "Superpowers",
   "Food & Drink",
-  "Rapid Fire"
+  "Rapid Fire",
+  "Software & Programming"
 ];
 
 const SEGMENTS = CATEGORIES.length;

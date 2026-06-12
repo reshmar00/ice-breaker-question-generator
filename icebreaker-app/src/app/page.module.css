@@ -23,16 +23,17 @@
   border: 0.375rem solid #222;
   position: relative;
   background: conic-gradient(
-    #ff6b6b 0deg 36deg,
-    #ffd93d 36deg 72deg,
-    #6bcb77 72deg 108deg,
-    #4d96ff 108deg 144deg,
-    #9d4edd 144deg 180deg,
-    #f72585 180deg 216deg,
-    #f77f00 216deg 252deg,
-    #00b4d8 252deg 288deg,
-    #90be6d 288deg 324deg,
-    #ff99c8 324deg 360deg
+    #ff6b6b 0deg 32.727deg,
+    #ffd93d 32.727deg 65.455deg,
+    #6bcb77 65.455deg 98.182deg,
+    #4d96ff 98.182deg 130.909deg,
+    #9d4edd 130.909deg 163.636deg,
+    #f72585 163.636deg 196.364deg,
+    #f77f00 196.364deg 229.091deg,
+    #00b4d8 229.091deg 261.818deg,
+    #90be6d 261.818deg 294.545deg,
+    #ff99c8 294.545deg 327.273deg,
+    #06d6a0 327.273deg 360deg
   );
 }
 
