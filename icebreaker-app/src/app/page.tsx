@@ -136,7 +136,11 @@ export default function Home() {
               <div
                 key={label}
                 className={styles.label}
-                style={{ transform: `rotate(${centerAngle}deg) translateY(-85px) rotate(90deg)` }}
+                style={{
+                  transform: `rotate(${centerAngle}deg) translateY(-140px) rotate(90deg)`,
+                  // Shrink long names so the single (nowrap) line stays inside the wheel rim.
+                  fontSize: label.length > 24 ? "0.64rem" : label.length > 18 ? "0.7rem" : undefined,
+                }}
               >
                 {label}
               </div>
